@@ -1,18 +1,28 @@
-use crate::{base_box, mp4_data};
 use crate::types::array::Mp4Array;
 use crate::types::padded_byte::PaddedByte;
+use crate::{base_box, mp4_data};
+
+mp4_data! {
+    #[derive(Default, Debug, Clone, Eq, PartialEq, Hash)]
+    pub struct ProfileIDCExt {
+        pub chroma_format: PaddedByte<6, 1>,
+        pub bit_depth_luma_minus8: PaddedByte<5, 1>,
+        pub bit_depth_chroma_minus8: PaddedByte<5, 1>,
+        pub spses: Mp4Array<u8, Mp4Array<u16, u8>>,
+    }
+}
 
 mp4_data! {
     #[derive(Default, Debug, Clone, Eq, PartialEq, Hash)]
     pub struct AVCDecoderConfigurationRecord {
-        pub configuartion_version: u8,
+        pub configuration_version: u8,
         pub profile_indication: u8,
         pub profile_compatibility: u8,
         pub level_indication: u8,
         pub length_size_minus_one: PaddedByte<6, 1>,
         pub sps: Mp4Array<PaddedByte<3, 1>, Mp4Array<u16, u8>>,
         pub pps: Mp4Array<u8, Mp4Array<u16, u8>>,
-        // Todo: profile idc ext (14496-15 § 5.2.4.1.1)
+        pub profile_idc_ext: ProfileIDCExt,
     }
 }
 
@@ -26,7 +36,9 @@ base_box! {
 
 impl Default for AvcC {
     fn default() -> Self {
-        Self { avc_config: Default::default() }
+        Self {
+            avc_config: Default::default(),
+        }
     }
 }
 
@@ -56,5 +68,4 @@ mod test {
             Ok(())
         })
     }
-
 }

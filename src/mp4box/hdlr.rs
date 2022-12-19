@@ -16,7 +16,7 @@ impl Default for Hdlr {
             _res1: Default::default(),
             handler_type: Default::default(),
             _res2: Default::default(),
-            name: Default::default()
+            name: Default::default(),
         }
     }
 }

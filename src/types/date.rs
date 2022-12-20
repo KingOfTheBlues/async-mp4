@@ -6,7 +6,7 @@ use crate::error::MP4Error;
 use crate::types::versioned_u32_u64::VersionedU32U64;
 
 pub fn base_date() -> DateTime<Utc> {
-    Utc.ymd(1904, 1, 1).and_hms(0, 0, 0)
+    Utc.with_ymd_and_hms(1904, 1, 1, 0, 0, 0).unwrap()
 }
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
@@ -17,7 +17,6 @@ impl Default for Mp4DateTime {
         Utc::now().into()
     }
 }
-
 
 impl From<DateTime<Utc>> for Mp4DateTime {
     fn from(date: DateTime<Utc>) -> Self {

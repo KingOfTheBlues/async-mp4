@@ -1,12 +1,14 @@
-use crate::{base_box};
+use crate::base_box;
 use crate::mp4box::avcc::AvcCBox;
+use crate::mp4box::btrt::BtrtBox;
 use crate::types::sample::VisualSampleEntry;
 
 base_box! {
     box (b"avc1", Avc1, Avc1Box) data {
         visual_sample_entry: VisualSampleEntry
     } children {
-        avcc: AvcCBox
+        avcc: AvcCBox,
+        btrt: BtrtBox
     }
 }
 
@@ -14,7 +16,8 @@ impl Default for Avc1 {
     fn default() -> Self {
         Self {
             visual_sample_entry: Default::default(),
-            avcc: Some(Default::default())
+            avcc: Some(Default::default()),
+            btrt: None,
         }
     }
 }
@@ -24,7 +27,7 @@ mod test {
     use crate::bytes_read::Mp4Readable;
     use crate::error::MP4Error;
     use crate::header::BoxHeader;
-    use crate::mp4box::avc1::{Avc1Box};
+    use crate::mp4box::avc1::Avc1Box;
     use crate::mp4box::box_trait::{BoxRead, BoxWrite, IBox};
 
     #[test]
@@ -45,5 +48,4 @@ mod test {
             Ok(())
         })
     }
-
 }
